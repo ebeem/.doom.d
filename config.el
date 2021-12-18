@@ -351,5 +351,14 @@ With argument ARG, do this that many times."
 (global-set-key (kbd "C-<backspace>") 'backward-delete-word)
 
 
+;;(setq projectile-project-search-path '(("~/workspace/" . 9) ("/mnt/repository/projects/" . 9) ("/mnt/repository/workspace/" . 9) ("/mnt/storage/workspace/" . 9)))
+;; (setq projectile-project-search-path '(("~/workspace/" . 4) ("/mnt/repository/projects/" . 4) ("/mnt/repository/workspace/" . 4) ("/mnt/storage/workspace/" . 4)))
+(setq projectile-project-search-path '(("~/workspace/" . 3)))
 (setq emms-source-file-default-directory "/mnt/repository/media/music/")
 (setq projectile-enable-caching nil)
+(setq projectile-auto-discover nil)
+(setq org-support-shift-select t)
+(add-hook 'window-setup-hook 'toggle-frame-maximized t)
+;; (remove-hook 'projectile-relevant-known-projects 'projectile-discover-projects-in-search-path t)
+;; (remove-hook 'projectile-relevant-known-projects 'projectile-cleanup-known-projects t)
+;; (remove-hook 'projectile-relevant-known-projects 'projectile-discover-projects-in-search-path)

@@ -54,3 +54,16 @@
 (package! org-superstar)
 (package! simple-mpc)
 (package! bongo)
+
+
+;; Install and load `quelpa-use-package'.
+(package-install 'quelpa-use-package)
+(require 'quelpa-use-package)
+
+;; Install `plz' HTTP library (not on MELPA yet).
+(use-package plz
+  :quelpa (plz :fetcher github :repo "alphapapa/plz.el"))
+
+;; Install Ement.
+(use-package ement
+  :quelpa (ement :fetcher github :repo "alphapapa/ement.el"))
