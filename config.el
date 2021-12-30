@@ -21,11 +21,12 @@
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-(setq doom-font (font-spec :family "UbuntuMono Nerd Font Mono" :size 20 :weight 'bold))
+(setq doom-font (font-spec :family "UbuntuMono Nerd Font Mono" :size 22 :weight 'bold))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
+;; (setq doom-theme 'doom-one)
 (setq doom-theme 'doom-one)
 
 ;; If you use `org' and don't want your org files in the default location below,
@@ -36,6 +37,8 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
+;;; :ui doom-dashboard
+(setq fancy-splash-image (concat doom-private-dir "splash.png"))
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -89,22 +92,22 @@
         (select-window (winum-get-window-by-number windownum))))))
 
 (defun exts/swap-buffers-to-window (windownum follow-focus-p)
-        "Swaps visible buffers between active window and selected window.
+  "Swaps visible buffers between active window and selected window.
   follow-focus-p controls whether focus moves to new window (with buffer), or
   stays on current"
-        (interactive)
-        (if (> windownum (length (window-list-1 nil nil t)))
-            (message "No window numbered %s" windownum)
-          (let* ((b1 (current-buffer))
-                 (w1 (selected-window))
-                 (w2 (winum-get-window-by-number windownum))
-                 (b2 (window-buffer w2)))
-            (unless (eq w1 w2)
-              (set-window-buffer w1 b2)
-              (set-window-buffer w2 b1)
-              (unrecord-window-buffer w1 b1)
-              (unrecord-window-buffer w2 b2)))
-          (when follow-focus-p (winum-select-window-by-number windownum))))
+  (interactive)
+  (if (> windownum (length (window-list-1 nil nil t)))
+      (message "No window numbered %s" windownum)
+    (let* ((b1 (current-buffer))
+           (w1 (selected-window))
+           (w2 (winum-get-window-by-number windownum))
+           (b2 (window-buffer w2)))
+      (unless (eq w1 w2)
+        (set-window-buffer w1 b2)
+        (set-window-buffer w2 b1)
+        (unrecord-window-buffer w1 b1)
+        (unrecord-window-buffer w2 b2)))
+    (when follow-focus-p (winum-select-window-by-number windownum))))
 
 ;; define and evaluate three numbered functions:
 ;; buffer-to-window-1 to 9
@@ -144,22 +147,22 @@
        :desc "Create frame"               "f" #'make-frame)
 
       (:prefix-map ("b" . "buffers")
-        :desc "Kill current buffer"       "d" #'kill-current-buffer
-        :desc "Switch buffer"             "s" #'switch-to-buffer
-        :desc "Switch buffer"             "b" #'switch-to-buffer
-        :desc "Kill a buffer"             "k" #'kill-buffer
-        :desc "Rename buffer"             "r" #'rename-buffer
-        :desc "Move buffer to window 1"   "1" #'swap-buffers-to-window-1
-        :desc "Move buffer to window 2"   "2" #'swap-buffers-to-window-2
-        :desc "Move buffer to window 3"   "3" #'swap-buffers-to-window-3
-        :desc "Move buffer to window 4"   "4" #'swap-buffers-to-window-4
-        :desc "Move buffer to window 5"   "5" #'swap-buffers-to-window-5
-        :desc "Move buffer to window 6"   "6" #'swap-buffers-to-window-6
-        :desc "Move buffer to window 7"   "7" #'swap-buffers-to-window-7
-        :desc "Move buffer to window 8"   "8" #'swap-buffers-to-window-8
-        :desc "Move buffer to window 9"   "9" #'swap-buffers-to-window-9
-        :desc "Move buffer to window 0"   "0" #'swap-buffers-to-window-0
-        :desc "New buffer"                "n" #'+default/new-buffer)
+       :desc "Kill current buffer"       "d" #'kill-current-buffer
+       :desc "Switch buffer"             "s" #'switch-to-buffer
+       :desc "Switch buffer"             "b" #'switch-to-buffer
+       :desc "Kill a buffer"             "k" #'kill-buffer
+       :desc "Rename buffer"             "r" #'rename-buffer
+       :desc "Move buffer to window 1"   "1" #'swap-buffers-to-window-1
+       :desc "Move buffer to window 2"   "2" #'swap-buffers-to-window-2
+       :desc "Move buffer to window 3"   "3" #'swap-buffers-to-window-3
+       :desc "Move buffer to window 4"   "4" #'swap-buffers-to-window-4
+       :desc "Move buffer to window 5"   "5" #'swap-buffers-to-window-5
+       :desc "Move buffer to window 6"   "6" #'swap-buffers-to-window-6
+       :desc "Move buffer to window 7"   "7" #'swap-buffers-to-window-7
+       :desc "Move buffer to window 8"   "8" #'swap-buffers-to-window-8
+       :desc "Move buffer to window 9"   "9" #'swap-buffers-to-window-9
+       :desc "Move buffer to window 0"   "0" #'swap-buffers-to-window-0
+       :desc "New buffer"                "n" #'+default/new-buffer)
 
 
       (:prefix-map ("W" . "workspaces")
@@ -189,7 +192,7 @@
        :desc "Load last autosaved session"  "L" #'doom/quickload-session
        :desc "Undo window config"           "u" #'winner-undo
        :desc "Redo window config"           "U" #'winner-redo)
-)
+      )
 
 
 ;; TODO: Mode this to another section
@@ -223,30 +226,67 @@
 
   (setq org-outline-path-complete-in-steps nil)
   (setq org-refile-use-outline-path t)
+  (setq org-hide-emphasis-markers t)
 
   (org-babel-do-load-languages
-    'org-babel-load-languages
-    '((emacs-lisp . t)
-      (ledger . t)))
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (ledger . t)))
 
   (push '("conf-unix" . conf-unix) org-src-lang-modes)
-)
-  ;; NOTE: Subsequent sections are still part of this use-package block!
+  )
+;; NOTE: Subsequent sections are still part of this use-package block!
 
-  (defun dw/org-mode-visual-fill ()
-    (setq visual-fill-column-width 160
-          visual-fill-column-center-text t)
-    (visual-fill-column-mode 1))
+(defun dw/org-mode-visual-fill ()
+  (setq visual-fill-column-width 160
+        visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
 
-  (use-package visual-fill-column
-    :hook (org-mode . dw/org-mode-visual-fill))
+(use-package visual-fill-column
+  :hook (org-mode . dw/org-mode-visual-fill))
 
-  (use-package org-superstar
-    :after org
-    :hook (org-mode . org-superstar-mode)
-    :custom
-    (org-superstar-remove-leading-stars t)
-    (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●"))
+
+
+;; Set the font face based on platform
+(pcase system-type
+  ((or 'gnu/linux 'windows-nt 'cygwin)
+   (set-face-attribute 'default nil
+                       :font "UbuntuMono Nerd Font Mono"
+                       :weight 'light
+                       :height 110))
+  ('darwin (set-face-attribute 'default nil :font "UbuntuMono Nerd Font Mono" :height 110)))
+
+;; Set the fixed pitch face
+(set-face-attribute 'fixed-pitch nil
+                    :font "UbuntuMono Nerd Font Mono"
+                    :weight 'light
+                    :height 110)
+
+
+;; Set the variable pitch face
+(set-face-attribute 'variable-pitch nil
+                    :font "Iosevka Aile"
+                    :height 170)
+
+
+
+
+;; Set default, fixed and variabel pitch fonts
+;; Use M-x menu-set-font to view available fonts
+(use-package mixed-pitch
+  :hook
+  (text-mode . mixed-pitch-mode)
+  :config
+  (set-face-attribute 'fixed-pitch nil :font "UbuntuMono Nerd Font Mono" :weight 'bold :height 1.3))
+
+
+
+(use-package org-superstar
+  :after org
+  :hook (org-mode . org-superstar-mode)
+  :custom
+  (org-superstar-remove-leading-stars t)
+  (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●"))
 
   ;; Replace list hyphen with dot
   ;; (font-lock-add-keywords 'org-mode
@@ -254,6 +294,7 @@
   ;;                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
   ;; Increase the size of various headings
+  (set-face-attribute 'fixed-pitch nil :font "UbuntuMono Nerd Font Mono" :weight 'bold :height 1.3)
   (set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
   (dolist (face '((org-level-1 . 1.2)
                   (org-level-2 . 1.1)
@@ -264,11 +305,6 @@
                   (org-level-7 . 1.1)
                   (org-level-8 . 1.1)))
     (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
-
-  ;; Make sure org-indent face is available
-  ;;(require 'org-indent)
-
-
   ;; Ensure that anything that should be fixed-pitch in Org files appears that way
   (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
   (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
@@ -279,44 +315,18 @@
   (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
   (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
   (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-document-info-keyword nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-meta-line nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-property-value nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-special-keyword nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-tag nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)
 
   ;; Get rid of the background on column views
   (set-face-attribute 'org-column nil :background nil)
-  (set-face-attribute 'org-column-title nil :background nil)
-  )
+  (set-face-attribute 'org-column-title nil :background nil))
 
-  ;; TODO: Others to consider
-  ;; '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-  ;; '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-  ;; '(org-property-value ((t (:inherit fixed-pitch))) t)
-  ;; '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-  ;; '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
-  ;; '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
-  ;; '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
-
-
-
-;; Set the font face based on platform
-(pcase system-type
-  ((or 'gnu/linux 'windows-nt 'cygwin)
-   (set-face-attribute 'default nil
-                       :font "Fira Mono"
-                       :weight 'light
-                       :height 110))
-  ('darwin (set-face-attribute 'default nil :font "Fira Mono" :height 110)))
-
-;; Set the fixed pitch face
-(set-face-attribute 'fixed-pitch nil
-                    :font "Fira Mono"
-                    :weight 'light
-                    :height 110)
-
-;; Set the variable pitch face
-(set-face-attribute 'variable-pitch nil
-                    ;; :font "Cantarell"
-                    :font "Iosevka Aile"
-                    :height 170
-                    :weight 'light)
 
 
 (defcustom lsp-file-watch-threshold 100000
@@ -362,3 +372,90 @@ With argument ARG, do this that many times."
 ;; (remove-hook 'projectile-relevant-known-projects 'projectile-discover-projects-in-search-path t)
 ;; (remove-hook 'projectile-relevant-known-projects 'projectile-cleanup-known-projects t)
 ;; (remove-hook 'projectile-relevant-known-projects 'projectile-discover-projects-in-search-path)
+
+;; (setq lsp-csharp-server-path "/usr/bin/omnisharp")
+
+
+
+;; duplicate line function using C-d
+(defun duplicate-line()
+  (interactive)
+  (move-beginning-of-line 1)
+  (kill-line)
+  (yank)
+  (open-line 1)
+  (next-line 1)
+  (yank)
+  )
+(global-set-key (kbd "C-d") 'duplicate-line)
+
+
+;; always reload buffers changed externally
+(global-auto-revert-mode t)
+
+;; org-mode configuration
+;; add time stamp and note on task done
+(setq org-log-done 'note)
+
+
+;; elfeed
+(setq rmh-elfeed-org-files (list "~/.doom.d/elfeed.org"))
+(elfeed-goodies/setup)
+
+
+(projectile-register-project-type 'godot '("project.godot")
+                                  :project-file "project.godot"
+				  :compile "msbuild"
+				  :run "godot-mono -d --remote-debug localhost:45000")
+
+  (require 'emms-setup)
+  (emms-all)
+  (emms-default-players)
+  (setq emms-source-file-default-directory "~/Music/") ;; Change to your music folder
+
+
+
+
+  ;; Choose one of these
+  (setq emms-info-functions '(emms-info-tinytag))  ;; When using Tinytag
+  ;;(setq emms-info-functions '(emms-info-exiftool)) When using Exiftool
+
+
+
+
+  ;; Load cover images
+  (setq emms-browser-covers 'emms-browser-cache-thumbnail-async)
+
+
+;; Keyboard shortcuts
+(global-set-key (kbd "<XF86AudioPrev>") 'emms-previous)
+(global-set-key (kbd "<XF86AudioNext>") 'emms-next)
+(global-set-key (kbd "<XF86AudioPlay>") 'emms-pause)
+
+
+;; (setq custom-theme-directory "/home/ebeem/.doom.d/themes")
+
+
+
+;; saving desktop frames to session files
+;;(desktop-save-mode 1)
+
+; No delay in showing suggestions.
+(setq company-idle-delay 0)
+
+; Show suggestions after entering one character.
+(setq company-minimum-prefix-length 1)
+(setq company-selection-wrap-around t)
+
+
+;;emacs-howdoyou configuration
+(setq howdoyou-number-of-answers 10)
+(global-set-key (kbd "C-c s h") 'howdoyou-query)
+;; change keybinding
+;; (define-key minor-mode-map (kbd "C-M-<left>") (kbd "M-<left>"))
+;; (define-key minor-mode-map (kbd "C-M-<right>") (kbd "M-<right>"))
+
+ (eval-after-load "howdoyou"
+    '(progn
+       (define-key howdoyou-mode-map (kbd "C-c <left>") #'howdoyou-previous-link)
+       (define-key howdoyou-mode-map (kbd "C-c <right>") #'howdoyou-next-link)))

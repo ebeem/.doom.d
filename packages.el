@@ -52,9 +52,11 @@
 (package! visual-fill-column)
 (package! diminish)
 (package! org-superstar)
+(package! mixed-pitch)
 (package! simple-mpc)
 (package! bongo)
-
+(package! flatbuffers-mode)
+(package! howdoyou)
 
 ;; Install and load `quelpa-use-package'.
 (package-install 'quelpa-use-package)
