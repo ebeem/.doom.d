@@ -51,21 +51,17 @@
 
 (package! visual-fill-column)
 (package! diminish)
-(package! org-superstar)
-(package! mixed-pitch)
-(package! simple-mpc)
-(package! bongo)
 (package! flatbuffers-mode)
 (package! howdoyou)
 
-;; Install and load `quelpa-use-package'.
-(package-install 'quelpa-use-package)
-(require 'quelpa-use-package)
+;; ;; Install and load `quelpa-use-package'.
+;; (package-install 'quelpa-use-package)
+;; (require 'quelpa-use-package)
 
-;; Install `plz' HTTP library (not on MELPA yet).
-(use-package plz
-  :quelpa (plz :fetcher github :repo "alphapapa/plz.el"))
+;; ;; Install `plz' HTTP library (not on MELPA yet).
+;; (use-package plz
+;;   :quelpa (plz :fetcher github :repo "alphapapa/plz.el"))
 
-;; Install Ement.
-(use-package ement
-  :quelpa (ement :fetcher github :repo "alphapapa/ement.el"))
+;; ;; Install Ement.
+;; (use-package ement
+;;   :quelpa (ement :fetcher github :repo "alphapapa/ement.el"))

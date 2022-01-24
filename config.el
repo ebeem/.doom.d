@@ -1,7 +1,8 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
-;; sync' after modifying this file!
+;; sync' after modifying this file
+(add-hook 'window-setup-hook 'toggle-frame-maximized t)
 
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
@@ -21,7 +22,7 @@
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-(setq doom-font (font-spec :family "UbuntuMono Nerd Font Mono" :size 22 :weight 'bold))
+(setq doom-font (font-spec :family "UbuntuMono Nerd Font Mono" :size 20 :weight 'bold))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -237,16 +238,6 @@
   )
 ;; NOTE: Subsequent sections are still part of this use-package block!
 
-(defun dw/org-mode-visual-fill ()
-  (setq visual-fill-column-width 160
-        visual-fill-column-center-text t)
-  (visual-fill-column-mode 1))
-
-(use-package visual-fill-column
-  :hook (org-mode . dw/org-mode-visual-fill))
-
-
-
 ;; Set the font face based on platform
 (pcase system-type
   ((or 'gnu/linux 'windows-nt 'cygwin)
@@ -265,46 +256,29 @@
 
 ;; Set the variable pitch face
 (set-face-attribute 'variable-pitch nil
-                    :font "Iosevka Aile"
-                    :height 170)
-
-
-
-
-;; Set default, fixed and variabel pitch fonts
-;; Use M-x menu-set-font to view available fonts
-(use-package mixed-pitch
-  :hook
-  (text-mode . mixed-pitch-mode)
-  :config
-  (set-face-attribute 'fixed-pitch nil :font "UbuntuMono Nerd Font Mono" :weight 'bold :height 1.3))
-
-
+                    :font "Ubuntu"
+                    :height 120)
 
 (use-package org-superstar
   :after org
   :hook (org-mode . org-superstar-mode)
   :custom
   (org-superstar-remove-leading-stars t)
-  (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●"))
+  (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
 
-  ;; Replace list hyphen with dot
-  ;; (font-lock-add-keywords 'org-mode
-  ;;                         '(("^ *\\([-]\\) "
-  ;;                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
-  ;; Increase the size of various headings
-  (set-face-attribute 'fixed-pitch nil :font "UbuntuMono Nerd Font Mono" :weight 'bold :height 1.3)
-  (set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
+(add-hook! org-mode
+;; Increase the size of various headings
+  ;; (set-face-attribute 'fixed-pitch nil :font "UbuntuMono Nerd Font Mono" :weight 'bold :height 1.35)
+  (set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.2)
   (dolist (face '((org-level-1 . 1.2)
-                  (org-level-2 . 1.1)
-                  (org-level-3 . 1.05)
-                  (org-level-4 . 1.0)
-                  (org-level-5 . 1.1)
-                  (org-level-6 . 1.1)
-                  (org-level-7 . 1.1)
-                  (org-level-8 . 1.1)))
-    (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
+                  (org-level-2 . 1.17)
+                  (org-level-3 . 1.15)
+                  (org-level-4 . 1.14)
+                  (org-level-5 . 1.12)
+                  (org-level-6 . 1.10)
+                  (org-level-7 . 1.08)
+                  (org-level-8 . 1.08)))
+    (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'bold :height (cdr face)))
   ;; Ensure that anything that should be fixed-pitch in Org files appears that way
   (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
   (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
@@ -325,9 +299,19 @@
 
   ;; Get rid of the background on column views
   (set-face-attribute 'org-column nil :background nil)
-  (set-face-attribute 'org-column-title nil :background nil))
+  (set-face-attribute 'org-column-title nil :background nil)
+)
 
 
+  (setq org-fancy-priorities-list '((?A . "❗")
+                                  (?B . "🚩")
+                                  (?C . "🏴")
+                                  (?D . "☕")))
+                                  ;;(?1 . "🏳")
+
+(custom-set-faces
+  '(mode-line ((t (:inherit 'fixed-pitch))))
+  '(mode-line-inactive ((t (:inherit 'fixed-pitch)))))
 
 (defcustom lsp-file-watch-threshold 100000
   "Show warning if the files to watch are more than.
@@ -368,7 +352,6 @@ With argument ARG, do this that many times."
 (setq projectile-enable-caching nil)
 (setq projectile-auto-discover nil)
 (setq org-support-shift-select t)
-(add-hook 'window-setup-hook 'toggle-frame-maximized t)
 ;; (remove-hook 'projectile-relevant-known-projects 'projectile-discover-projects-in-search-path t)
 ;; (remove-hook 'projectile-relevant-known-projects 'projectile-cleanup-known-projects t)
 ;; (remove-hook 'projectile-relevant-known-projects 'projectile-discover-projects-in-search-path)
@@ -399,7 +382,7 @@ With argument ARG, do this that many times."
 
 
 ;; elfeed
-(setq rmh-elfeed-org-files (list "~/.doom.d/elfeed.org"))
+(setq rmh-elfeed-org-iles (list "~/.doom.d/elfeed.org"))
 (elfeed-goodies/setup)
 
 
@@ -408,33 +391,29 @@ With argument ARG, do this that many times."
 				  :compile "msbuild"
 				  :run "godot-mono -d --remote-debug localhost:45000")
 
-  (require 'emms-setup)
-  (emms-all)
-  (emms-default-players)
-  (setq emms-source-file-default-directory "~/Music/") ;; Change to your music folder
+(require 'emms-setup)
+(emms-all)
+(emms-default-players)
+(setq emms-source-file-default-directory "~/Music/") ;; Change to your music folder
 
 
 
 
-  ;; Choose one of these
-  (setq emms-info-functions '(emms-info-tinytag))  ;; When using Tinytag
-  ;;(setq emms-info-functions '(emms-info-exiftool)) When using Exiftool
+;; Choose one of these
+(setq emms-info-functions '(emms-info-tinytag))  ;; When using Tinytag
+;;(setq emms-info-functions '(emms-info-exiftool)) When using Exiftool
 
 
 
 
-  ;; Load cover images
-  (setq emms-browser-covers 'emms-browser-cache-thumbnail-async)
+;; Load cover images
+(setq emms-browser-covers 'emms-browser-cache-thumbnail-async)
 
 
 ;; Keyboard shortcuts
 (global-set-key (kbd "<XF86AudioPrev>") 'emms-previous)
 (global-set-key (kbd "<XF86AudioNext>") 'emms-next)
 (global-set-key (kbd "<XF86AudioPlay>") 'emms-pause)
-
-
-;; (setq custom-theme-directory "/home/ebeem/.doom.d/themes")
-
 
 
 ;; saving desktop frames to session files
@@ -451,11 +430,22 @@ With argument ARG, do this that many times."
 ;;emacs-howdoyou configuration
 (setq howdoyou-number-of-answers 10)
 (global-set-key (kbd "C-c s h") 'howdoyou-query)
-;; change keybinding
-;; (define-key minor-mode-map (kbd "C-M-<left>") (kbd "M-<left>"))
-;; (define-key minor-mode-map (kbd "C-M-<right>") (kbd "M-<right>"))
-
  (eval-after-load "howdoyou"
     '(progn
        (define-key howdoyou-mode-map (kbd "C-c <left>") #'howdoyou-previous-link)
        (define-key howdoyou-mode-map (kbd "C-c <right>") #'howdoyou-next-link)))
+
+;; treemacs configuration
+(setq doom-themes-treemacs-theme "doom-colors")
+(setq doom-themes-treemacs-enable-variable-pitch t)
+(setq doom-themes-treemacs-variable-pitch-face 'variable-pitch)
+
+;; modeline
+(setq doom-modeline-buffer-file-name-style 'truncate-with-project)
+
+
+;; saving/restoring sessions with frames
+
+
+;; vterm
+(add-hook 'vterm-mode-hook (lambda () (hide-mode-line-mode -1)))

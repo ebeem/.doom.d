@@ -1,19 +1,3 @@
-;;; doom-tron-theme.el --- inspired by Atom One Dark -*- lexical-binding: t; no-byte-compile: t; -*-
-;;
-;; Copyright (C) 2016-2021 Henrik Lissner
-;;
-;; Author: Henrik Lissner <https://github.com/hlissner>
-;; Created: December 6, 2020
-;; Version: 2.0.0
-;; Keywords: custom themes, faces
-;; Homepage: https://github.com/hlissner/emacs-doom-themes
-;; Package-Requires: ((emacs "25.1") (cl-lib "0.5") (doom-themes "2.2.1"))
-;;
-;;; Commentary:
-;;
-;; Inspired by Atom's One Dark color scheme.
-;;
-;;; Code:
 
 (require 'doom-themes)
 
@@ -21,31 +5,31 @@
 ;;
 ;;; Variables
 
-(defgroup doom-trrrrooon-theme nil
+(defgroup doom-tron-theme nil
   "Options for the `doom-one' theme."
   :group 'doom-themes)
 
-(defcustom doom-trrrrooon-brighter-modeline nil
+(defcustom doom-tron-brighter-modeline nil
   "If non-nil, more vivid colors will be used to style the mode-line."
-  :group 'doom-trrrrooon-theme
+  :group 'doom-tron-theme
   :type 'boolean)
 
-(defcustom doom-trrrrooon-brighter-comments nil
+(defcustom doom-tron-brighter-comments nil
   "If non-nil, comments will be highlighted in more vivid colors."
-  :group 'doom-trrrrooon-theme
+  :group 'doom-tron-theme
   :type 'boolean)
 
-(defcustom doom-trrrrooon-padded-modeline doom-themes-padded-modeline
+(defcustom doom-tron-padded-modeline doom-themes-padded-modeline
   "If non-nil, adds a 4px padding to the mode-line.
 Can be an integer to determine the exact padding."
-  :group 'doom-trrrrooon-theme
+  :group 'doom-tron-theme
   :type '(choice integer boolean))
 
 
 ;;
 ;;; Theme definition
 
-(def-doom-theme doom-trrrrooon
+(def-doom-theme doom-tron
   "A dark theme inspired by Atom One Dark."
 
   ;; name        default   256           16
@@ -92,8 +76,8 @@ Can be an integer to determine the exact padding."
    (vertical-bar   (doom-darken base1 0.1))
    (selection      dark-blue)
    (builtin        magenta)
-   (comments       (if doom-trrrrooon-brighter-comments dark-cyan base5))
-   (doc-comments   (doom-lighten (if doom-trrrrooon-brighter-comments dark-cyan base5) 0.25))
+   (comments       (if doom-tron-brighter-comments dark-cyan base5))
+   (doc-comments   (doom-lighten (if doom-tron-brighter-comments dark-cyan base5) 0.25))
    (constants      violet)
    (functions      magenta)
    (keywords       blue)
@@ -115,39 +99,39 @@ Can be an integer to determine the exact padding."
    ;; mandatory for derived themes.
    (modeline-fg              fg)
    (modeline-fg-alt          base5)
-   (modeline-bg              (if doom-trrrrooon-brighter-modeline
+   (modeline-bg              (if doom-tron-brighter-modeline
                                  (doom-darken blue 0.45)
                                (doom-darken bg-alt 0.1)))
-   (modeline-bg-alt          (if doom-trrrrooon-brighter-modeline
+   (modeline-bg-alt          (if doom-tron-brighter-modeline
                                  (doom-darken blue 0.475)
                                `(,(doom-darken (car bg-alt) 0.15) ,@(cdr bg))))
    (modeline-bg-inactive     `(,(car bg-alt) ,@(cdr base1)))
    (modeline-bg-inactive-alt `(,(doom-darken (car bg-alt) 0.1) ,@(cdr bg)))
 
    (-modeline-pad
-    (when doom-trrrrooon-padded-modeline
-      (if (integerp doom-trrrrooon-padded-modeline) doom-trrrrooon-padded-modeline 4))))
+    (when doom-tron-padded-modeline
+      (if (integerp doom-tron-padded-modeline) doom-tron-padded-modeline 4))))
 
 
   ;;;; Base theme face overrides
   (((line-number &override) :foreground base4)
    ((line-number-current-line &override) :foreground fg)
    ((font-lock-comment-face &override)
-    :background (if doom-trrrrooon-brighter-comments (doom-lighten bg 0.05)))
+    :background (if doom-tron-brighter-comments (doom-lighten bg 0.05)))
    (mode-line
     :background modeline-bg :foreground modeline-fg
     :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg)))
    (mode-line-inactive
     :background modeline-bg-inactive :foreground modeline-fg-alt
     :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-inactive)))
-   (mode-line-emphasis :foreground (if doom-trrrrooon-brighter-modeline base8 highlight))
+   (mode-line-emphasis :foreground (if doom-tron-brighter-modeline base8 highlight))
 
    ;;;; css-mode <built-in> / scss-mode
    (css-proprietary-property :foreground orange)
    (css-property             :foreground green)
    (css-selector             :foreground blue)
    ;;;; doom-modeline
-   (doom-modeline-bar :background (if doom-trrrrooon-brighter-modeline modeline-bg highlight))
+   (doom-modeline-bar :background (if doom-tron-brighter-modeline modeline-bg highlight))
    (doom-modeline-buffer-file :inherit 'mode-line-buffer-id :weight 'bold)
    (doom-modeline-buffer-path :inherit 'mode-line-emphasis :weight 'bold)
    (doom-modeline-buffer-project-root :foreground green :weight 'bold)
@@ -175,6 +159,7 @@ Can be an integer to determine the exact padding."
     :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-inactive-alt))))
 
   ;;;; Base theme variable overrides-
-  ())
+  ;; ()
+  )
 
-;;; doom-trrrrooon-theme.el ends here
+;;; doom-tron-theme.el ends here
